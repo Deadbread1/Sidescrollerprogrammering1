@@ -6,6 +6,8 @@ using UnityEngine.Animations;
 public class Movementcontroller : MonoBehaviour
 {
     public float MovementSpeed = 1.0f;
+    public float Gravity = 1.0f;
+    public float Groundlevel = 0.0f;
     void Start()
     {
         
@@ -14,6 +16,14 @@ public class Movementcontroller : MonoBehaviour
    
     void Update()
     {
+
+        Vector3 Gravityposition = transform.position;
+        Gravityposition.y -= Gravity + Time.deltaTime;
+       if(Gravityposition.y < Groundlevel) { Gravityposition.y = Groundlevel; };
+        transform.position = Gravityposition;
+
+
+
         //movement
         if (Input.GetKey(KeyCode.W))
         {

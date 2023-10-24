@@ -15,17 +15,14 @@ public class PhysicsCharacterController : MonoBehaviour
     public float GravityPerSecond = 160.0f; //Falling Speed
     public float GroundLevel = 0.0f; //Ground Value
 
-    //Jump 
+    //Jump
     public float JumpSpeedFactor = 3.0f; //How much faster is the jump than the movespeed?
     public float JumpMaxHeight = 150.0f;
-    //How far have we flew this jump?
-    public float JumpHeightDelta = 0.0f;
+    [SerializeField]
+    private float JumpHeightDelta = 0.0f;
 
     //Movement
     public float MovementSpeedPerSecond = 10.0f; //Movement Speed
-
-
-
 
 
     private void Update()
@@ -37,6 +34,7 @@ public class PhysicsCharacterController : MonoBehaviour
         }
     }
 
+
     void FixedUpdate()
     {
         Vector3 characterVelocity = myRigidBody.velocity;
@@ -44,15 +42,16 @@ public class PhysicsCharacterController : MonoBehaviour
 
         if (JumpingState == CharacterState.Jumping)
         {
-            float jumpMovement = MovementSpeedPerSecond * JumpSpeedFactor;
-            characterVelocity.y = jumpMovement;
+            float totalJumpMovementThisFrame = MovementSpeedPerSecond * JumpSpeedFactor;
+            characterVelocity.y = totalJumpMovementThisFrame;
 
-            JumpHeightDelta += jumpMovement * Time.deltaTime;
+            JumpHeightDelta += totalJumpMovementThisFrame * Time.deltaTime;
 
             if (JumpHeightDelta >= JumpMaxHeight)
             {
                 JumpingState = CharacterState.Airborne;
-
+                JumpHeightDelta = 0.0f;
+                characterVelocity.y = 0.0f;
             }
         }
 
